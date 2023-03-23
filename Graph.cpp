@@ -102,11 +102,12 @@ void Graph::calculate_laplacian_spectrum() {
 }
 
 void Graph::perform_initial_partition() {
+	// vector<double> sorted_2nd_eig(laplacian_eigenvectors[1].begin(), laplacian_eigenvectors[1].end());
 	vector<double> sorted_2nd_eig;
-	sorted_2nd_eig.insert(sorted_2nd_eig.begin(), 
-			laplacian_eigenvectors[1].begin(), laplacian_eigenvectors[1].end());
+	for (int i = 0; i < n; i++) {
+		sorted_2nd_eig.push_back(laplacian_eigenvectors[i][1]);
+	}
 	sort(sorted_2nd_eig.begin(), sorted_2nd_eig.end());
-
 	double median = sorted_2nd_eig[n / 2];
 
 	A_prime.clear();
@@ -114,10 +115,10 @@ void Graph::perform_initial_partition() {
 
 	vector<int> tie;
 	for (int i = 0; i < n; i++) {
-		if (laplacian_eigenvectors[1][i] < median) {
+		if (laplacian_eigenvectors[i][1] < median) {
 			A_prime.push_back(i);
 		}
-		else if (laplacian_eigenvectors[1][i] > median) {
+		else if (laplacian_eigenvectors[i][1] > median) {
 			B_prime.push_back(i);
 		}
 		else {
@@ -143,7 +144,7 @@ void Graph::perform_initial_partition() {
 	edge_separator.clear();
 	for (int u : A_prime) {
 		for (int v : B_prime) {
-			if (adjacency[u][v] && u < v) {
+			if (adjacency[u][v]) {
 				edge_separator.push_back(make_pair(u, v));
 			}
 		}
@@ -493,3 +494,30 @@ void tql2(int n, vector<double>& d, vector<double>& e, matrix& V) {
 		}
 	}
 }
+
+/*
+void check_spetral_decomposition(matrix& V, vector<double>& eigenvalues, matrix& eigenvectors) {
+	// Vx = lambda x
+	for (int i = 0; i < eigenvalues.size(); i++) {
+		double lambda = eigenvalues[i];
+
+		vector<double> a(eigenvectors[0].size(), 0);
+		for (int j = 0; j < a.size(); j++) {
+			for (int k = 0; k < V[j].size(); k++) {
+				a[j] += V[j][k] * eigenvectors[i][k];
+			}
+		}
+
+		for (int j = 0; j < a.size(); j++) {
+			cout << a[j] << "\t";
+		}
+		cout << endl;
+
+		for (int j = 0; j < eigenvectors[i].size(); j++) {
+			cout << lambda * eigenvectors[i][j] << "\t";
+		}
+		cout << endl;
+		cout << "--------------------" << endl;
+	}
+}
+*/
