@@ -3,8 +3,17 @@
 int main() {
 
 	Graph graph;
-	graph.load_adjacency_matrix("data/small_test.mtx");
-	// graph.load_adjacency_matrix("data/bcspwr09.mtx");
+	int flag = 0;
+
+	// select input matrix
+	flag = graph.load_adjacency_matrix("data/small_test2.mtx");
+	// flag = graph.load_adjacency_matrix("data/bcspwr9.mtx");
+	// flag = graph.load_adjacency_matrix("data/can_1072.mtx");
+	// flag = graph.load_adjacency_matrix("data/jagmesh1.mtx");
+
+	if (!flag) {
+		return 0;
+	}
 
 	graph.calculate_laplacian_matrix();
 	graph.calculate_laplacian_spectrum();
